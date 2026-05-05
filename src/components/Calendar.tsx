@@ -1,0 +1,94 @@
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useMemo } from "react";
+import { buildMonthGrid, displayMonth, isoDate, nextMonth, previousMonth } from "../lib/date";
+import type { CalendarDayStatus, ISODate } from "../types";
+
+interface CalendarProps {
+  month: Date;
+  selectedDate: ISODate;
+  statuses: Record<ISODate, CalendarDayStatus>;
+  onMonthChange: (month: Date) => void;
+  onSelectDate: (date: ISODate) => void;
+}
+
+const weekdays = ["一", "二", "三", "四", "五", "六", "日"];
+
+export function Calendar({ month, selectedDate, statuses, onMonthChange, onSelectDate }: CalendarProps) {
+  const today = useMemo(() => new Date(), []);
+  const days = useMemo(() => buildMonthGrid(month, today), [month, today]);
+
+  return (
+    <section className="panel calendar-panel" aria-label="月历">
+      <div className="panel-header">
+        <button
+          className="icon-button"
+          type="button"
+          onClick={() => onMonthChange(previousMonth(month))}
+          aria-label="上个月"
+          title="上个月"
+        >
+          <ChevronLeft size={18} />
+        </button>
+        <h2>{displayMonth(month)}</h2>
+        <button
+          className="icon-button"
+          type="button"
+          onClick={() => onMonthChange(nextMonth(month))}
+          aria-label="下个月"
+          title="下个月"
+        >
+          <ChevronRight size={18} />
+        </button>
+      </div>
+
+      <div className="calendar-weekdays" aria-hidden="true">
+        {weekdays.map((day) => (
+          <span key={day}>{day}</span>
+        ))}
+      </div>
+
+      <div className="calendar-grid">
+        {days.map((day) => {
+          const selected = day.iso === selectedDate;
+          const status = statuses[day.iso];
+          const statusLabel = [
+            status?.hasDiary ? "有日记" : "",
+            status?.hasImages ? "有图片" : "",
+            status?.todoCount ? `${status.openTodoCount}项未完成计划` : ""
+          ]
+            .filter(Boolean)
+            .join("，");
+
+          return (
+            <button
+              className={[
+                "calendar-day",
+                day.isCurrentMonth ? "" : "muted",
+                day.isToday ? "today" : "",
+                selected ? "selected" : "",
+                status ? "has-status" : ""
+              ]
+                .filter(Boolean)
+                .join(" ")}
+              key={day.iso}
+              type="button"
+              onClick={() => onSelectDate(day.iso)}
+              aria-pressed={selected}
+              aria-label={`${day.iso}${day.isToday ? " 今天" : ""}${statusLabel ? ` ${statusLabel}` : ""}`}
+            >
+              <span>{day.date.getDate()}</span>
+              {day.iso === isoDate(today) ? <small>今</small> : null}
+              {status ? (
+                <span className="calendar-markers" aria-hidden="true">
+                  {status.hasDiary ? <i className="marker diary" /> : null}
+                  {status.hasImages ? <i className="marker image" /> : null}
+                  {status.todoCount > 0 ? <i className={status.openTodoCount > 0 ? "marker todo open" : "marker todo"} /> : null}
+                </span>
+              ) : null}
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}

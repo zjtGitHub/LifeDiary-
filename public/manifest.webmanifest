@@ -1,0 +1,19 @@
+{
+  "name": "日记",
+  "short_name": "日记",
+  "description": "本地保存的日记、计划、日历和人生表格。",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f4ed",
+  "theme_color": "#2f7f70",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

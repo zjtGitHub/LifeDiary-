@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="日记">
+  <rect width="512" height="512" rx="112" fill="#2f7f70"/>
+  <path d="M154 122h168c34 0 62 28 62 62v206H190c-34 0-62-28-62-62V148c0-14 12-26 26-26z" fill="#fffcf4"/>
+  <path d="M186 122v206c0 34 28 62 62 62h136" fill="none" stroke="#246257" stroke-width="22" stroke-linecap="round"/>
+  <path d="M222 208h104M222 260h104M222 312h72" stroke="#2f7f70" stroke-width="22" stroke-linecap="round"/>
+  <circle cx="170" cy="164" r="18" fill="#c29435"/>
+</svg>
