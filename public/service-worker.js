@@ -1,5 +1,6 @@
-const CACHE_NAME = "riji-shell-v1";
-const APP_SHELL = ["/", "/manifest.webmanifest", "/icons/icon.svg"];
+const CACHE_NAME = "riji-shell-v2";
+const fromScope = (path) => new URL(path, self.registration.scope).toString();
+const APP_SHELL = ["./", "manifest.webmanifest", "icons/icon.svg"].map(fromScope);
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));
@@ -23,7 +24,7 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (request.mode === "navigate") {
-    event.respondWith(fetch(request).catch(() => caches.match("/")));
+    event.respondWith(fetch(request).catch(() => caches.match(fromScope("./"))));
     return;
   }
 
